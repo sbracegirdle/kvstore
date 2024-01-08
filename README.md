@@ -27,7 +27,7 @@ kv.Set("myKey", "myValue")
 And get a value from the disk by its key:
 
 ```go
-value, found := disk.Get(1)
+value, ok := kv.Get(tt.key)
 ```
 
 ## Usage (http API)
