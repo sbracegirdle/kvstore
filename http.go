@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,14 +20,15 @@ func startServer(kv *Store) {
 	})
 
 	r.POST("/keys/:key", func(c *gin.Context) {
-		var body struct {
-			Value string `json:"value"`
-		}
-		if err := c.BindJSON(&body); err != nil {
+		var body json.RawMessage
+		err := c.BindJSON(&body)
+
+		if err != nil {
 			c.JSON(400, gin.H{"error": "Bad request"})
 			return
 		}
-		kv.Set(c.Param("key"), body.Value)
+
+		kv.Set(c.Param("key"), body)
 		c.JSON(200, gin.H{"status": "success"})
 	})
 

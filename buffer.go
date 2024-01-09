@@ -1,8 +1,12 @@
 package main
 
+import (
+	"encoding/json"
+)
+
 type Entry struct {
 	key   uint32
-	value string
+	value json.RawMessage
 }
 
 type Buffer struct {
@@ -19,15 +23,15 @@ func NewBuffer(size int) *Buffer {
 	}
 }
 
-func (b *Buffer) Get(key uint32) (string, bool) {
+func (b *Buffer) Get(key uint32) (json.RawMessage, bool) {
 	if entry, ok := b.cache[key]; ok {
 		b.moveToFront(entry)
 		return entry.value, true
 	}
-	return "", false
+	return nil, false
 }
 
-func (b *Buffer) Put(key uint32, value string) {
+func (b *Buffer) Put(key uint32, value json.RawMessage) {
 	if entry, ok := b.cache[key]; ok {
 		entry.value = value
 		b.moveToFront(entry)

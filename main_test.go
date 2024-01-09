@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -31,12 +32,14 @@ func TestSet(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.key, func(t *testing.T) {
-			kv.Set(tt.key, tt.value)
+			kv.Set(tt.key, json.RawMessage(tt.value))
 
 			got, _ := kv.Get(tt.key)
-			if got != tt.value {
-				t.Errorf("Set(%q) = %v, want %v", tt.key, got, tt.value)
-			}
+			// Compare json values
+			var gotValue, wantValue interface{}
+			json.Unmarshal(got, &gotValue)
+			json.Unmarshal([]byte(tt.value), &wantValue)
+			assert.Equal(t, gotValue, wantValue)
 		})
 	}
 }
@@ -47,11 +50,11 @@ func TestSetOverwrite(t *testing.T) {
 	value1 := "value1"
 	value2 := "value2"
 
-	kv.Set(key, value1)
-	kv.Set(key, value2)
+	kv.Set(key, json.RawMessage(value1))
+	kv.Set(key, json.RawMessage(value2))
 
 	got, _ := kv.Get(key)
-	if got != value2 {
+	if string(got) != value2 {
 		t.Errorf("Set(%q) = %v, want %v", key, got, value2)
 	}
 }
@@ -71,10 +74,10 @@ func TestSetGetLargeData(t *testing.T) {
 	key := "large"
 	value := strings.Repeat("a", 1<<20) // 1 MiB
 
-	kv.Set(key, value)
+	kv.Set(key, json.RawMessage(value))
 	got, _ := kv.Get(key)
 
-	if got != value {
+	if string(got) != value {
 		t.Errorf("Set(%q) = %v, want %v", key, got, value)
 	}
 }

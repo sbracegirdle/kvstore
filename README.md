@@ -2,6 +2,23 @@
 
 This is a Key-Value Store developed in Go. This project is for learning purposes and is not suitable for production use.
 
+Features:
+
+- [x] Hash map data structure
+- [x] LRU cache buffering
+- [x] HTTP API
+- [x] Paged I/O
+- [ ] Document storage (WIP)
+
+Roadmap:
+
+- [ ] Worker pools
+- [ ] Safe concurrency (mutex etc)
+- [ ] More efficient data structure
+- [ ] Indexes
+- [ ] Transactions
+- [ ] Workers
+
 ## Files
 
 - `main.go`: This is the main entry point of the application, which initialises a store and starts the HTTP api.

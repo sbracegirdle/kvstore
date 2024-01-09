@@ -2,6 +2,7 @@ package main
 
 import (
 	"hash/fnv"
+	"encoding/json"
 )
 
 type Store struct {
@@ -24,7 +25,7 @@ func (s *Store) hashKey(key string) uint32 {
 	return h.Sum32()
 }
 
-func (s *Store) Get(key string) (string, bool) {
+func (s *Store) Get(key string) (json.RawMessage, bool) {
 	hash := s.hashKey(key)
 	value, ok := s.Buffer.Get(hash)
 	if ok {
@@ -37,7 +38,7 @@ func (s *Store) Get(key string) (string, bool) {
 	return value, ok
 }
 
-func (s *Store) Set(key, value string) {
+func (s *Store) Set(key string, value json.RawMessage) {
 	hash := s.hashKey(key)
 	s.Buffer.Put(hash, value)
 	s.Disk.Put(hash, value)
