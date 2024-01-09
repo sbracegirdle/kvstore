@@ -17,7 +17,9 @@ Roadmap:
 - [ ] More efficient data structure
 - [ ] Indexes
 - [ ] Transactions
-- [ ] Workers
+- [ ] Workers / replication
+- [ ] Authentication
+- [ ] Authorisation & access control
 
 ## Files
 
