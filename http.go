@@ -1,10 +1,15 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
+
+var srv *http.Server
 
 func startServer(kv *Store) {
 	r := gin.Default()
@@ -32,5 +37,24 @@ func startServer(kv *Store) {
 		c.JSON(200, gin.H{"status": "success"})
 	})
 
-	r.Run() // listen and serve on 0.0.0.0:8080
+	srv = &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
+
+	go func() {
+		// service connections
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			panic(err)
+		}
+	}()
+}
+
+func stopServer() {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := srv.Shutdown(ctx); err != nil {
+		panic(err) // failure/timeout shutting down the server gracefully
+	}
 }

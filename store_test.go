@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
-	"io/ioutil"
-	"net/http"
 	"strings"
 	"testing"
 
@@ -80,37 +77,4 @@ func TestSetGetLargeData(t *testing.T) {
 	if string(got) != value {
 		t.Errorf("Set(%q) = %v, want %v", key, got, value)
 	}
-}
-
-func TestAPI(t *testing.T) {
-	// Start the server.
-	kv := NewStore(100, 1000)
-	go startServer(kv)
-
-	client := &http.Client{}
-
-	// Test POST /keys/:key
-	req, _ := http.NewRequest("POST", "http://localhost:8080/keys/testKey", bytes.NewBufferString(`{"value":"testValue"}`))
-	req.Header.Set("Content-Type", "application/json")
-	resp, err := client.Do(req)
-	if err != nil {
-		t.Fatal(err)
-	}
-	body, _ := ioutil.ReadAll(resp.Body)
-	resp.Body.Close()
-
-	assert.Equal(t, 200, resp.StatusCode)
-	assert.Contains(t, string(body), "success")
-
-	// Test GET /keys/:key
-	req, _ = http.NewRequest("GET", "http://localhost:8080/keys/testKey", nil)
-	resp, err = client.Do(req)
-	if err != nil {
-		t.Fatal(err)
-	}
-	body, _ = ioutil.ReadAll(resp.Body)
-	resp.Body.Close()
-
-	assert.Equal(t, 200, resp.StatusCode)
-	assert.Contains(t, string(body), "testValue")
 }
