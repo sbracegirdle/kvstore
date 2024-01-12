@@ -8,12 +8,13 @@ Features:
 - [x] LRU cache buffering
 - [x] HTTP API
 - [x] Paged I/O
-- [ ] Document storage (WIP)
+- [x] Document storage
+- [ ] Safe concurrency (mutex etc)
 
 Roadmap:
 
 - [ ] Worker pools
-- [ ] Safe concurrency (mutex etc)
+
 - [ ] More efficient data structure
 - [ ] Indexes
 - [ ] Transactions
