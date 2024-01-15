@@ -1,21 +1,24 @@
 package main
 
 import (
-	"hash/fnv"
 	"encoding/json"
+	"hash/fnv"
 )
 
 type Store struct {
 	Buffer *Buffer
 	Disk   *Disk
+	Mutex  *myRWMutex
 }
 
 func NewStore(bufferSize, diskSize int) *Store {
 	buffer := NewBuffer(bufferSize)
 	disk := NewDisk(diskSize)
+	mutex := newMyRWMutex()
 	return &Store{
 		Buffer: buffer,
 		Disk:   disk,
+		Mutex:  mutex,
 	}
 }
 
@@ -26,6 +29,9 @@ func (s *Store) hashKey(key string) uint32 {
 }
 
 func (s *Store) Get(key string) (json.RawMessage, bool) {
+	s.Mutex.RLock()
+	defer s.Mutex.RUnlock()
+
 	hash := s.hashKey(key)
 	value, ok := s.Buffer.Get(hash)
 	if ok {
@@ -39,6 +45,9 @@ func (s *Store) Get(key string) (json.RawMessage, bool) {
 }
 
 func (s *Store) Set(key string, value json.RawMessage) {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+
 	hash := s.hashKey(key)
 	s.Buffer.Put(hash, value)
 	s.Disk.Put(hash, value)
