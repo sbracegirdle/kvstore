@@ -9,18 +9,24 @@ Features:
 - [x] HTTP API
 - [x] Paged I/O
 - [x] Document storage
-- [ ] Safe concurrency (mutex etc)
+- [x] Safe concurrency (mutex etc)
+- [wip] Single file storage
 
 Roadmap:
 
-- [ ] Worker pools
+- [ ] Batch Operations: Add support for batch get/set operations.
+- [ ] Write Ahead Log: Add support for writing all data operations to a log
+- [ ] Indexes: Implement a way to retrieve records performantly from a non-primary key
+- [ ] Transactions: Implement transactions to allow multiple operations to be executed atomically.
+- [ ] Compression: Add data compression to save storage space.
+- [ ] Encryption: Implement data encryption for security.
+- [ ] Replication: Add support for data replication across multiple nodes.
+- [ ] Sharding: Implement sharding to distribute data across multiple nodes.
+- [ ] Query Language: Implement a simple query language for complex retrievals.
+- [ ] Access Control: Add user authentication and access control.
+- [ ] Telemetry: Emit OpenTelemetry metrics and traces
+- [ ] Query Language: Implement a simple query language for complex retrievals.
 
-- [ ] More efficient data structure
-- [ ] Indexes
-- [ ] Transactions
-- [ ] Workers / replication
-- [ ] Authentication
-- [ ] Authorisation & access control
 
 ## Files
 
