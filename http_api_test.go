@@ -11,7 +11,7 @@ import (
 
 func TestAPI(t *testing.T) {
 	// Start the server.
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	go startServer(kv)
 	defer stopServer()
 
@@ -46,7 +46,7 @@ func TestAPI(t *testing.T) {
 
 func TestAPI_NotJSON(t *testing.T) {
 	// Start the server.
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	go startServer(kv)
 	defer stopServer()
 

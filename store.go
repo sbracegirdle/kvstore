@@ -11,9 +11,14 @@ type Store struct {
 	Mutex  *myRWMutex
 }
 
-func NewStore(bufferSize, diskSize int) *Store {
+func NewStore(bufferSize int, filename string, indexFilename string) *Store {
 	buffer := NewBuffer(bufferSize)
-	disk := NewDisk(diskSize)
+	disk, err := NewDisk(filename, indexFilename)
+
+	if err != nil {
+		panic(err)
+	}
+
 	mutex := newMyRWMutex()
 	return &Store{
 		Buffer: buffer,

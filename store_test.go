@@ -9,7 +9,7 @@ import (
 )
 
 func TestSet(t *testing.T) {
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 
 	tests := []struct {
 		key   string
@@ -42,7 +42,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestSetOverwrite(t *testing.T) {
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	key := "key1"
 	value1 := "value1"
 	value2 := "value2"
@@ -57,7 +57,7 @@ func TestSetOverwrite(t *testing.T) {
 }
 
 func TestGetNonExistentKey(t *testing.T) {
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	key := "nonexistent"
 
 	_, ok := kv.Get(key)
@@ -67,7 +67,7 @@ func TestGetNonExistentKey(t *testing.T) {
 }
 
 func TestSetGetLargeData(t *testing.T) {
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	key := "large"
 	value := strings.Repeat("a", 1<<20) // 1 MiB
 

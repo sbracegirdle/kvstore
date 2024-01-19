@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	kv := NewStore(100, 1000)
+	kv := NewStore(100, "test.db", "test.idx")
 	startServer(kv) // Starts a go routine
 
 	// Create a channel to receive OS signals
