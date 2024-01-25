@@ -10,7 +10,11 @@ Features:
 - [x] Paged I/O
 - [x] Document storage
 - [x] Safe concurrency (mutex etc)
-- [wip] Single file storage
+- [x] Single file storage
+
+WIP:
+
+- [ ] Web Console: Web UI for querying, visualising and retrieving data.
 
 Roadmap:
 
