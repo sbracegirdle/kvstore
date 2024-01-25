@@ -36,6 +36,7 @@ Roadmap:
 
 - `main.go`: This is the main entry point of the application, which initialises a store and starts the HTTP api.
 - `disk.go`: This file contains the `Disk` struct and its methods. The `Disk` struct represents a disk where the key-value pairs are stored. It has methods for getting and putting data on the disk.
+- `index.go`: B-tree based index for finding the position of a record from its key.
 - `store.go`: This file contains the Store struct and its methods. The Store struct represents a key-value store that uses a buffer and a disk for storage. It has methods for setting and getting key-value pairs. The Set method stores the key-value pair in both the buffer and the disk. The Get method first tries to get the value from the buffer. If it's not in the buffer, it tries to get it from the disk and if successful, puts it in the buffer for future access.
 - `buffer.go`: This file contains the Buffer struct and its methods. The Buffer struct represents a buffer that stores a certain number of key-value pairs in memory for quick access. It has methods for getting and putting data in the buffer. If the buffer is full and a new key-value pair needs to be put in the buffer, it removes the least recently used (LRU cache) key-value pair before putting the new one.
 - `http.go`: This file contains the startServer function which starts an HTTP server. The server has two routes: a GET route for getting the value of a key and a POST route for setting the value of a key. The server uses the Store to get and set the key-value pairs.
