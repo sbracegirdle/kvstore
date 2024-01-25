@@ -26,7 +26,7 @@ func TestSearch(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		result, _ := tree.root.Search(test.key)
+		result, _ := tree.Root.Search(test.key)
 		if (result != nil) != test.expected {
 			t.Errorf("Expected %v, got %v", test.expected, result != nil)
 		}
@@ -36,11 +36,11 @@ func TestSearch(t *testing.T) {
 // Assuming a GetIndexValues function exists
 func getIndexValues(node *IndexTreeNode, keys *[]IndexValue) {
 	if node != nil {
-		for _, child := range node.child {
+		for _, child := range node.Child {
 			getIndexValues(child, keys)
 		}
 
-		*keys = append(*keys, node.keys...)
+		*keys = append(*keys, node.Keys...)
 	}
 }
 
@@ -81,12 +81,12 @@ func TestInsert(t *testing.T) {
 
 	for _, test := range tests {
 		tree := &IndexTree{
-			root: &IndexTreeNode{
-				isLeaf: true,
-				keys:   make([]IndexValue, 0),
-				child:  make([]*IndexTreeNode, 0),
+			Root: &IndexTreeNode{
+				IsLeaf: true,
+				Keys:   make([]IndexValue, 0),
+				Child:  make([]*IndexTreeNode, 0),
 			},
-			t: 3,
+			MinDegree: 3,
 		}
 
 		for _, key := range test.keys {
@@ -94,7 +94,7 @@ func TestInsert(t *testing.T) {
 		}
 
 		var keys []IndexValue
-		getIndexValues(tree.root, &keys)
+		getIndexValues(tree.Root, &keys)
 
 		if test.expected == nil || len(test.expected) == 0 {
 			if len(keys) > 0 {

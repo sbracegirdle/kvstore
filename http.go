@@ -14,28 +14,49 @@ var srv *http.Server
 func startServer(kv *Store) {
 	r := gin.Default()
 
-	r.GET("/keys/:key", func(c *gin.Context) {
-		key := c.Param("key")
-		value, ok := kv.Get(key)
-		if ok {
-			c.JSON(200, gin.H{"value": value})
-		} else {
-			c.JSON(404, gin.H{"error": "Key not found"})
-		}
-	})
+	// Load HTML templates
+	r.LoadHTMLGlob("templates/*")
 
-	r.POST("/keys/:key", func(c *gin.Context) {
-		var body json.RawMessage
-		err := c.BindJSON(&body)
+	// Create a route group for the API
+	api := r.Group("/api")
+	{
+		api.GET("/keys/:key", func(c *gin.Context) {
+			key := c.Param("key")
+			value, ok := kv.Get(key)
+			if ok {
+				c.JSON(200, gin.H{"value": value})
+			} else {
+				c.JSON(404, gin.H{"error": "Key not found"})
+			}
+		})
 
-		if err != nil {
-			c.JSON(400, gin.H{"error": "Bad request"})
-			return
-		}
+		api.POST("/keys/:key", func(c *gin.Context) {
+			var body json.RawMessage
+			err := c.BindJSON(&body)
 
-		kv.Set(c.Param("key"), body)
-		c.JSON(200, gin.H{"status": "success"})
-	})
+			if err != nil {
+				c.JSON(400, gin.H{"error": "Bad request"})
+				return
+			}
+
+			err = kv.Set(c.Param("key"), body)
+
+			if err != nil {
+				c.JSON(500, gin.H{"error": "Internal server error"})
+				return
+			} else {
+				c.JSON(200, gin.H{"status": "success"})
+			}
+		})
+	}
+
+	// Create a route group for the console
+	console := r.Group("/console")
+	{
+		console.GET("/", func(c *gin.Context) {
+			c.HTML(http.StatusOK, "index.html", gin.H{})
+		})
+	}
 
 	srv = &http.Server{
 		Addr:    ":8080",

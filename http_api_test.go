@@ -18,7 +18,7 @@ func TestAPI(t *testing.T) {
 	client := &http.Client{}
 
 	// Test POST /keys/:key
-	req, _ := http.NewRequest("POST", "http://localhost:8080/keys/testKey", bytes.NewBufferString(`{"value":"testValue"}`))
+	req, _ := http.NewRequest("POST", "http://localhost:8080/api/keys/testKey", bytes.NewBufferString(`{"value":"testValue"}`))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {
@@ -31,7 +31,7 @@ func TestAPI(t *testing.T) {
 	assert.Contains(t, string(body), "success")
 
 	// Test GET /keys/:key
-	req, _ = http.NewRequest("GET", "http://localhost:8080/keys/testKey", nil)
+	req, _ = http.NewRequest("GET", "http://localhost:8080/api/keys/testKey", nil)
 	resp, err = client.Do(req)
 	if err != nil {
 		t.Fatal(err)
@@ -53,7 +53,7 @@ func TestAPI_NotJSON(t *testing.T) {
 	client := &http.Client{}
 
 	// Test POST /keys/:key
-	req, _ := http.NewRequest("POST", "http://localhost:8080/keys/testKey", bytes.NewBufferString(`testValue`))
+	req, _ := http.NewRequest("POST", "http://localhost:8080/api/keys/testKey", bytes.NewBufferString(`testValue`))
 	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
 	if err != nil {

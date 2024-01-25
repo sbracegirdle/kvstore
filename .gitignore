@@ -19,3 +19,6 @@ vendor/
 /go.sum
 
 db_*
+
+*.db
+*.idx

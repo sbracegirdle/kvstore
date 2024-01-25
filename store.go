@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"hash/fnv"
 )
 
@@ -16,6 +17,7 @@ func NewStore(bufferSize int, filename string, indexFilename string) *Store {
 	disk, err := NewDisk(filename, indexFilename)
 
 	if err != nil {
+		fmt.Println("Error creating disk:", err)
 		panic(err)
 	}
 
@@ -49,11 +51,18 @@ func (s *Store) Get(key string) (json.RawMessage, bool) {
 	return value, ok
 }
 
-func (s *Store) Set(key string, value json.RawMessage) {
+func (s *Store) Set(key string, value json.RawMessage) error {
 	s.Mutex.Lock()
 	defer s.Mutex.Unlock()
 
 	hash := s.hashKey(key)
 	s.Buffer.Put(hash, value)
-	s.Disk.Put(hash, value)
+	err := s.Disk.Put(hash, value)
+
+	if err != nil {
+		fmt.Println("Error writing to disk:", err)
+		return err
+	}
+
+	return nil
 }
