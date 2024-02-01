@@ -1,9 +1,79 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Console</title>
+    <title>Keystore Console</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/htmx.org"></script>
   </head>
-  <body>
-    <h1>Welcome to the Console!</h1>
+  <body class="p-6">
+    <div class="flex flex-col min-h-screen max-w-xl mx-auto">
+      <h1 class="text-3xl mb-4">Keystore Console</h1>
+
+      <h2 class="text-2xl mb-2">Add a new key-value pair</h2>
+      <form
+        class="mb-4"
+        hx-post="/console/keys"
+        hx-vals='{"key": document.getElementById("key").value, "value": document.getElementById("value").value}'
+        hx-trigger="submit"
+        hx-target="#value-display-post"
+      >
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="key"
+            >Key:</label
+          >
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            id="key"
+            name="key"
+          />
+        </div>
+        <div class="mb-4">
+          <label class="block text-gray-700 text-sm font-bold mb-2" for="value"
+            >Value:</label
+          >
+          <input
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            type="text"
+            id="value"
+            name="value"
+          />
+        </div>
+        <input
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+          value="Submit"
+        />
+      </form>
+      <div id="value-display-post" class="p-4 border rounded"></div>
+
+      <h2 class="text-2xl mb-2">Get the value of an existing key</h2>
+      <form
+        class="mb-4"
+        hx-get="/console/keys"
+        hx-trigger="submit"
+        hx-target="#value-display-get"
+        hx-swap-oob="true"
+      >
+        <label class="block text-gray-700 text-sm font-bold mb-2" for="key"
+          >Key:</label
+        >
+        <input
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          type="text"
+          id="key"
+          name="key"
+        />
+        <input
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          type="submit"
+          value="Get Value"
+        />
+      </form>
+      <div id="value-display-get" class="p-4 border rounded"></div>
+    </div>
   </body>
 </html>

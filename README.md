@@ -11,10 +11,7 @@ Features:
 - [x] Document storage
 - [x] Safe concurrency (mutex etc)
 - [x] Single file storage
-
-WIP:
-
-- [ ] Web Console: Web UI for querying, visualising and retrieving data.
+- [x] Web Console: Basic Web UI for querying and retrieving data.
 
 Roadmap:
 
