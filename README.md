@@ -12,11 +12,11 @@ Features:
 - [x] Safe concurrency (mutex etc)
 - [x] Single file storage
 - [x] Web Console: Basic Web UI for querying and retrieving data.
+- [x] Write Ahead Log: Add support for writing all data operations to a log
 
 Roadmap:
 
 - [ ] Batch Operations: Add support for batch get/set operations.
-- [ ] Write Ahead Log: Add support for writing all data operations to a log
 - [ ] Indexes: Implement a way to retrieve records performantly from a non-primary key
 - [ ] Transactions: Implement transactions to allow multiple operations to be executed atomically.
 - [ ] Compression: Add data compression to save storage space.
