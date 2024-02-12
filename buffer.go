@@ -43,7 +43,6 @@ var BatchTimer *time.Timer
 // Duration after which the buffer is flushed to disk
 const FlushDuration = 1 * time.Minute
 
-// UpdateCache
 func (b *Buffer) UpdateCache(key uint32, value json.RawMessage) {
 	if entry, ok := b.cache[key]; ok {
 		entry.value = value
@@ -59,6 +58,22 @@ func (b *Buffer) UpdateCache(key uint32, value json.RawMessage) {
 	entry := &Entry{key, value}
 	b.cache[key] = entry
 	b.cacheQueue = append([]*Entry{entry}, b.cacheQueue...)
+}
+
+func (b *Buffer) BatchPut(ops []Operation) {
+	if len(b.WriteBatch) == 0 && len(ops) > 0 {
+		b.BatchTimer = time.AfterFunc(FlushDuration, b.flushBuffer)
+	}
+
+	for _, op := range ops {
+		b.UpdateCache(op.Key, op.Value)
+	}
+
+	b.WriteBatch = append(b.WriteBatch, ops...)
+
+	if len(b.WriteBatch) >= b.WriteBatchSize {
+		b.flushBuffer()
+	}
 }
 
 func (b *Buffer) Put(key uint32, value json.RawMessage) {

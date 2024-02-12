@@ -13,6 +13,11 @@ type Store struct {
 	WALog  *os.File // Write-ahead log
 }
 
+type StoreEntry struct {
+	Key   uint32
+	Value json.RawMessage
+}
+
 // Maximum size of the buffer before flushing to disk
 const MaxBufferSize = 100
 
@@ -64,6 +69,29 @@ func (s *Store) Set(key string, value json.RawMessage) error {
 	// Write the operation to the buffer
 	hash := s.hashKey(key)
 	s.Buffer.Put(hash, value)
+
+	return nil
+}
+
+func (s *Store) BatchSet(entries []StoreEntry) error {
+	s.Mutex.Lock()
+	defer s.Mutex.Unlock()
+
+	// Write the operations to the log before applying them to the index
+	for _, entry := range entries {
+		logEntry := fmt.Sprintf("Set %d %s\n", entry.Key, string(entry.Value))
+		_, err := s.WALog.Write([]byte(logEntry))
+		if err != nil {
+			return err
+		}
+	}
+
+	// Write the operations to the buffer
+	ops := make([]Operation, len(entries))
+	for i, entry := range entries {
+		ops[i] = Operation{Key: entry.Key, Value: entry.Value}
+	}
+	s.Buffer.BatchPut(ops)
 
 	return nil
 }
