@@ -13,11 +13,11 @@ Features:
 - [x] Single file storage
 - [x] Web Console: Basic Web UI for querying and retrieving data.
 - [x] Write Ahead Log: Add support for writing all data operations to a log
+- [x] Indexes: Implement a way to retrieve records performantly from a non-primary key
 
 Roadmap:
 
 - [ ] Batch Operations: Add support for batch get/set operations.
-- [ ] Indexes: Implement a way to retrieve records performantly from a non-primary key
 - [ ] Transactions: Implement transactions to allow multiple operations to be executed atomically.
 - [ ] Compression: Add data compression to save storage space.
 - [ ] Encryption: Implement data encryption for security.
